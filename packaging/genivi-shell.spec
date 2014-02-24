@@ -1,5 +1,5 @@
 Name:           genivi-shell
-Version:        0.0.1
+Version:        0.1
 Release:        0
 Summary:        GENIVI Shell Plugin-in
 License:        Apache-2.0
@@ -15,6 +15,8 @@ BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(weston)
 BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  weston-ivi-shell
+BuildRequires:  weston-ivi-shell-devel
 
 %description
 This package provides a weston plugin implementing the GENIVI layer
@@ -25,14 +27,14 @@ Summary: Development files for package %{name}
 Group:   Graphics & UI Framework/Development
 %description devel
 This package provides header files and other developer files needed for
-creating GENIIVI layer manager clients.
+creating GENIVI layer manager clients.
 
 %package libs
 Summary: Client libraries for package %{name}
 Group:   Graphics & UI Framework/Libraries
 %description libs
 This package provides the client libraries needed for
-running GENIIVI layer manager clients.
+running GENIVI layer manager clients.
 
 
 %prep
@@ -42,15 +44,19 @@ running GENIIVI layer manager clients.
 
 %build
 
-make %{?_smp_mflags};
+make %{?_smp_mflags}
 
 %install
 %make_install
 
+%post   -n genivi-shell-libs -p /sbin/ldconfig
+%postun -n genivi-shell-libs -p /sbin/ldconfig
+
 %files
 %manifest %{name}.manifest
 %defattr(-,root,root)
-%{_libdir}/weston/ivi-shell.so
+%{_bindir}/IVISurfaceCreator
+%{_bindir}/LayerManagerControl
 
 %files devel
 %defattr(-,root,root)
@@ -62,14 +68,10 @@ make %{?_smp_mflags};
 %{_includedir}/ilm/ilm_platform.h
 %{_includedir}/ilm/ilm_tools.h
 %{_includedir}/ilm/ilm_types.h
-%{_includedir}/layermanager/Bitmap.h
-%{_includedir}/layermanager/IlmMatrix.h
-%{_includedir}/layermanager/IpcModuleLoader.h
-%{_includedir}/layermanager/Log.h
-%{_includedir}/layermanager/LogMessageBuffer.h
 
 %files libs
 %defattr(-,root,root)
-%{_libdir}/libilmClient.so
-%{_libdir}/libilmCommon.so
-%{_libdir}/libilmControl.so
+%{_libdir}/libilmClient.so*
+%{_libdir}/libilmCommon.so*
+%{_libdir}/libilmControl.so*
+%{_libdir}/weston/ivi-controller.so
