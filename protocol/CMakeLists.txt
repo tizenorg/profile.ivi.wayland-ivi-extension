@@ -160,3 +160,11 @@ add_custom_target(ivi-controller-doc
                   COMMENT "Generating ivi-controller-api-${IVI_EXTENSION_VERSION}.pdf"
 )
 
+install(
+    FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/ivi-application-client-protocol.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ivi-application-server-protocol.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-client-protocol.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-server-protocol.h
+    DESTINATION include
+)
