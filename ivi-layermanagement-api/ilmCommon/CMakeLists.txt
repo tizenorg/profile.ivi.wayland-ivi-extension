@@ -63,6 +63,7 @@ install (
                 ${CMAKE_SOURCE_DIR}/ivi-layermanagement-api/ilmCommon/include/ilm_configuration.h
                 ${CMAKE_SOURCE_DIR}/ivi-layermanagement-api/ilmCommon/include/ilm_tools.h
                 ${CMAKE_SOURCE_DIR}/ivi-layermanagement-api/ilmCommon/include/ilm_platform.h
+                ${CMAKE_SOURCE_DIR}/ivi-layermanagement-api/ilmCommon/include/IpcModuleLoader.h
     DESTINATION include/ilm
 )
 
