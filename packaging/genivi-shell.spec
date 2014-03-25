@@ -5,7 +5,7 @@ Summary:        GENIVI Shell Plugin-in
 License:        Apache-2.0
 Group:          Graphics & UI Framework/Wayland Window System
 Url:            http://git.projects.genivi.org/wayland-ivi-extension.git
-Source0:         %name-%version.tar.gz
+Source0:        %name-%version.tar.gz
 BuildRequires:  autoconf >= 2.64, automake >= 1.11
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(wayland-client)
@@ -15,7 +15,6 @@ BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(weston)
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  weston-ivi-shell
 BuildRequires:  weston-ivi-shell-devel
 
 %description
@@ -25,6 +24,7 @@ manager client interface.
 %package devel
 Summary: Development files for package %{name}
 Group:   Graphics & UI Framework/Development
+Requires: %{name} = %{version}
 %description devel
 This package provides header files and other developer files needed for
 creating GENIVI layer manager clients.
