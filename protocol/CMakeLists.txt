@@ -95,6 +95,14 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-protocol.c
 )
 
+install (
+    FILES    ${CMAKE_CURRENT_BINARY_DIR}/ivi-application-client-protocol.h
+             ${CMAKE_CURRENT_BINARY_DIR}/ivi-application-server-protocol.h
+             ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-client-protocol.h
+             ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-server-protocol.h
+    DESTINATION include
+)
+
 
 #=============================================================================================
 # generate documentation for ivi-application API
