@@ -1,5 +1,5 @@
 Name:           genivi-shell
-Version:        0.1.2
+Version:        0.1.3
 Release:        0
 Summary:        GENIVI Shell Plugin-in
 License:        Apache-2.0
@@ -41,6 +41,10 @@ make %{?_smp_mflags}
 %install
 %make_install
 
+# install client header of ivi-application/controller
+install -m 755 protocol/ivi-controller-client-protocol.h %{buildroot}%{_includedir}/ilm
+install -m 755 protocol/ivi-application-client-protocol.h %{buildroot}%{_includedir}/ilm
+
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
@@ -64,6 +68,8 @@ make %{?_smp_mflags}
 %{_includedir}/ilm/ilm_platform.h
 %{_includedir}/ilm/ilm_tools.h
 %{_includedir}/ilm/ilm_types.h
+%{_includedir}/ilm/ivi-controller-client-protocol.h
+%{_includedir}/ilm/ivi-application-client-protocol.h
 %{_libdir}/libilmClient.so
 %{_libdir}/libilmCommon.so
 %{_libdir}/libilmControl.so
