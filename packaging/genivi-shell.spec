@@ -45,6 +45,23 @@ make %{?_smp_mflags}
 %install
 %make_install
 
+install -d %{buildroot}/%{_datadir}/%{name}/protocol/
+
+install protocol/ivi-application.xml %{buildroot}/%{_datadir}/%{name}/protocol/
+install protocol/ivi-controller.xml %{buildroot}/%{_datadir}/%{name}/protocol/
+
+install protocol/ivi-application-server-protocol.h \
+    %{buildroot}/%{_datadir}/%{name}/protocol/
+
+install protocol/ivi-application-protocol.c \
+    %{buildroot}/%{_datadir}/%{name}/protocol/
+
+install protocol/ivi-controller-server-protocol.h \
+    %{buildroot}/%{_datadir}/%{name}/protocol/
+
+install protocol/ivi-controller-protocol.c \
+    %{buildroot}/%{_datadir}/%{name}/protocol/
+
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
@@ -72,3 +89,8 @@ make %{?_smp_mflags}
 %{_libdir}/libilmClient.so
 %{_libdir}/libilmCommon.so
 %{_libdir}/libilmControl.so
+%{_datadir}/%{name}/protocol/*.xml
+%{_datadir}/%{name}/protocol/*.h
+%{_datadir}/%{name}/protocol/*.c
+
+
