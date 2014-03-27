@@ -64,7 +64,7 @@ make %{?_smp_mflags}
 %{_includedir}/ilm/ilm_platform.h
 %{_includedir}/ilm/ilm_tools.h
 %{_includedir}/ilm/ilm_types.h
-%{_includedir}/*.h
+%{_includedir}/weston/*.h
 %{_libdir}/libilmClient.so
 %{_libdir}/libilmCommon.so
 %{_libdir}/libilmControl.so
