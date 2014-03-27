@@ -32,6 +32,10 @@ creating GENIVI layer manager clients.
 %prep
 %setup -q
 
+/usr/bin/wayland-scanner code < protocol/ivi-controller.xml \
+    > protocol/ivi-controller-protocol.c
+
+
 %cmake .
 
 %build
