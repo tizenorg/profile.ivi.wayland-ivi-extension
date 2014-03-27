@@ -158,5 +158,5 @@ install(
     ${CMAKE_CURRENT_BINARY_DIR}/ivi-application-server-protocol.h
     ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-client-protocol.h
     ${CMAKE_CURRENT_BINARY_DIR}/ivi-controller-server-protocol.h
-    DESTINATION include
+    DESTINATION include/weston/
 )
