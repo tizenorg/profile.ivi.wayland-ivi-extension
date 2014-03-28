@@ -872,22 +872,31 @@ controller_layer_set_render_order(struct wl_client *client,
     struct ivisurface *ivisurf = NULL;
     uint32_t *id_surface = NULL;
     uint32_t id_layout_surface = 0;
-    int i = 0;
+    int n;
     (void)client;
 
+    if (id_surfaces->size == 0) {
+        return;
+    }
+
+    layoutsurf_array =
+        (struct weston_layout_surface**)calloc(
+            id_surfaces->size / sizeof(uint32_t), sizeof(struct weston_layout_surface*));
+
+    n = 0;
     wl_array_for_each(id_surface, id_surfaces) {
         wl_list_for_each(ivisurf, &ivilayer->shell->list_surface, link) {
             id_layout_surface = weston_layout_getIdOfSurface(ivisurf->layout_surface);
             if (*id_surface == id_layout_surface) {
-                layoutsurf_array[i] = ivisurf->layout_surface;
-                i++;
+                layoutsurf_array[n] = ivisurf->layout_surface;
+                n++;
                 break;
             }
         }
     }
 
     weston_layout_layerSetRenderOrder(ivilayer->layout_layer,
-                                   layoutsurf_array, id_surfaces->size);
+                                      (n == 0) ? NULL : layoutsurf_array, n);
     free(layoutsurf_array);
 }
 
@@ -993,25 +1002,31 @@ controller_screen_set_render_order(struct wl_client *client,
     struct ivilayer *ivilayer = NULL;
     uint32_t *id_layer = NULL;
     uint32_t id_layout_layer = 0;
-    int i = 0;
+    int n;
     (void)client;
 
-    *layoutlayer_array = (struct weston_layout_layer*)calloc(
-                            id_layers->size, sizeof(void*));
+    if (id_layers->size == 0) {
+        return;
+    }
 
+    layoutlayer_array =
+        (struct weston_layout_layer**)calloc(
+            id_layers->size / sizeof(uint32_t), sizeof(struct weston_layout_layer*));
+
+    n = 0;
     wl_array_for_each(id_layer, id_layers) {
         wl_list_for_each(ivilayer, &iviscrn->shell->list_layer, link) {
             id_layout_layer = weston_layout_getIdOfLayer(ivilayer->layout_layer);
             if (*id_layer == id_layout_layer) {
-                layoutlayer_array[i] = ivilayer->layout_layer;
-                i++;
+                layoutlayer_array[n] = ivilayer->layout_layer;
+                n++;
                 break;
             }
         }
     }
 
     weston_layout_screenSetRenderOrder(iviscrn->layout_screen,
-                                    layoutlayer_array, id_layers->size);
+                                       (n == 0) ? NULL : layoutlayer_array, n);
     free(layoutlayer_array);
 }
 
