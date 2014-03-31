@@ -47,19 +47,19 @@ make %{?_smp_mflags}
 
 install -d %{buildroot}/%{_datadir}/%{name}/protocol/
 
-install protocol/ivi-application.xml %{buildroot}/%{_datadir}/%{name}/protocol/
-install protocol/ivi-controller.xml %{buildroot}/%{_datadir}/%{name}/protocol/
+install -m 644 protocol/ivi-application.xml %{buildroot}/%{_datadir}/%{name}/protocol/
+install -m 644 protocol/ivi-controller.xml %{buildroot}/%{_datadir}/%{name}/protocol/
 
-install protocol/ivi-application-server-protocol.h \
+install -m 644 protocol/ivi-application-server-protocol.h \
     %{buildroot}/%{_datadir}/%{name}/protocol/
 
-install protocol/ivi-application-protocol.c \
+install -m 644 protocol/ivi-application-protocol.c \
     %{buildroot}/%{_datadir}/%{name}/protocol/
 
-install protocol/ivi-controller-server-protocol.h \
+install -m 644 protocol/ivi-controller-server-protocol.h \
     %{buildroot}/%{_datadir}/%{name}/protocol/
 
-install protocol/ivi-controller-protocol.c \
+install -m 644 protocol/ivi-controller-protocol.c \
     %{buildroot}/%{_datadir}/%{name}/protocol/
 
 %post   -p /sbin/ldconfig
