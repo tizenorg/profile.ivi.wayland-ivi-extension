@@ -1170,41 +1170,9 @@ controller_listener_layer_for_child(void *data,
                           struct ivi_controller *controller,
                           uint32_t id_layer)
 {
-    struct wayland_context *ctx = data;
-    struct layer_context *ctx_layer = NULL;
-    int32_t is_inside = 0;
-
-    is_inside = wayland_controller_is_inside_layer_list(
-        &ctx->list_layer, id_layer);
-
-    if (is_inside != 0) {
-        fprintf(stderr, "invalid id_surface in controller_listener_layer\n");
-        return;
-    }
-
-    ctx_layer = calloc(1, sizeof *ctx_layer);
-    if (ctx_layer == NULL) {
-        fprintf(stderr, "Failed to allocate memory for layer_context\n");
-        return;
-    }
-
-    wl_list_init(&ctx_layer->link);
-    wl_list_init(&ctx_layer->order.list_surface);
-
-    ctx_layer->controller = ivi_controller_layer_create(
-        controller, id_layer, 0, 0);
-    if (ctx_layer->controller == NULL) {
-        fprintf(stderr, "Failed to create controller layer\n");
-        return;
-    }
-    ctx_layer->id_layer = id_layer;
-
-    wl_list_insert(&ctx->list_layer, &ctx_layer->link);
-
-    ivi_controller_layer_add_listener(ctx_layer->controller,
-                                      &controller_layer_listener, ctx);
-
-    wl_display_roundtrip(ctx->display);
+    (void)data;
+    (void)controller;
+    (void)id_layer;
 }
 
 static void
@@ -1291,36 +1259,9 @@ controller_listener_layer_for_main(void *data,
                           struct ivi_controller *controller,
                           uint32_t id_layer)
 {
-    struct ilm_control_context *ctx = data;
-    struct layer_context *ctx_layer = NULL;
-    int32_t is_inside = 0;
-
-    is_inside = wayland_controller_is_inside_layer_list(
-        &ctx->main_ctx.list_layer, id_layer);
-
-    if (is_inside != 0) {
-        fprintf(stderr, "invalid id_surface in controller_listener_layer\n");
-        return;
-    }
-
-    ctx_layer = calloc(1, sizeof *ctx_layer);
-    if (ctx_layer == NULL) {
-        fprintf(stderr, "Failed to allocate memory for layer_context\n");
-        return;
-    }
-
-    wl_list_init(&ctx_layer->link);
-    wl_list_init(&ctx_layer->order.list_surface);
-
-    ctx_layer->controller = ivi_controller_layer_create(
-        controller, id_layer, 0, 0);
-    if (ctx_layer->controller == NULL) {
-        fprintf(stderr, "Failed to create controller layer\n");
-        return;
-    }
-    ctx_layer->id_layer = id_layer;
-
-    wl_list_insert(&ctx->main_ctx.list_layer, &ctx_layer->link);
+    (void)data;
+    (void)controller;
+    (void)id_layer;
 }
 
 static void
@@ -1525,8 +1466,6 @@ wayland_context_init(struct wayland_context *ctx)
     wl_list_init(&ctx->list_surface);
 }
 
-static void init_control(void);
-
 static ilmErrorTypes
 wayland_init(t_ilm_nativedisplay nativedisplay)
 {
@@ -1551,8 +1490,6 @@ wayland_init(t_ilm_nativedisplay nativedisplay)
 
     wayland_context_init(&ctx->main_ctx);
     wayland_context_init(&ctx->child_ctx);
-
-    init_control();
 
     return ILM_SUCCESS;
 }
@@ -1737,7 +1674,7 @@ wayland_getPropertiesOfLayer(t_ilm_uint layerID,
 
         ctx_layer = (struct layer_context*)
                     wayland_controller_get_layer_context(
-                        &ctx->child_ctx, (uint32_t)layerID);
+                        &ctx->main_ctx, (uint32_t)layerID);
 
         if (ctx_layer != NULL) {
             *pLayerProperties = ctx_layer->prop;
@@ -1784,7 +1721,7 @@ wayland_getPropertiesOfScreen(t_ilm_display screenID,
 
     if (pScreenProperties != NULL) {
         struct screen_context *ctx_screen = NULL;
-        ctx_screen = get_screen_context_by_id(&ctx->child_ctx, (uint32_t)screenID);
+        ctx_screen = get_screen_context_by_id(&ctx->main_ctx, (uint32_t)screenID);
         if (ctx_screen != NULL) {
             *pScreenProperties = ctx_screen->prop;
             create_layerids(ctx_screen, &pScreenProperties->layerIds,
@@ -1824,14 +1761,9 @@ wayland_getScreenIDs(t_ilm_uint* pNumberOfIDs, t_ilm_uint** ppIDs)
     struct ilm_control_context *ctx = get_instance();
 
     if ((pNumberOfIDs != NULL) && (ppIDs != NULL)) {
-        *pNumberOfIDs = 0;
-        *ppIDs = NULL;
-
         struct screen_context *ctx_scrn = NULL;
         t_ilm_uint length = wl_list_length(&ctx->main_ctx.list_screen);
-        if (length == 0) {
-            return ILM_SUCCESS;
-        }
+        *pNumberOfIDs = 0;
 
         *ppIDs = (t_ilm_uint*)malloc(length * sizeof *ppIDs);
         if (*ppIDs != NULL) {
@@ -1856,14 +1788,9 @@ wayland_getLayerIDs(t_ilm_int* pLength, t_ilm_layer** ppArray)
     struct ilm_control_context *ctx = get_instance();
 
     if ((pLength != NULL) && (ppArray != NULL)) {
-        *pLength = 0;
-        *ppArray = NULL;
-
         struct layer_context *ctx_layer = NULL;
         t_ilm_uint length = wl_list_length(&ctx->main_ctx.list_layer);
-        if (length == 0) {
-            return ILM_SUCCESS;
-        }
+        *pLength = 0;
 
         *ppArray = (t_ilm_layer*)malloc(length * sizeof *ppArray);
         if (*ppArray != NULL) {
@@ -1890,17 +1817,11 @@ wayland_getLayerIDsOnScreen(t_ilm_uint screenId,
     struct ilm_control_context *ctx = get_instance();
 
     if ((pLength != NULL) && (ppArray != NULL)) {
-        *pLength = 0;
-        *ppArray = NULL;
-
         struct screen_context *ctx_screen = NULL;
         ctx_screen = get_screen_context_by_id(&ctx->main_ctx, screenId);
         if (ctx_screen != NULL) {
             struct layer_context *ctx_layer = NULL;
             t_ilm_int length = wl_list_length(&ctx_screen->order.list_layer);
-            if (length == 0) {
-                return ILM_SUCCESS;
-            }
 
             *ppArray = (t_ilm_layer*)malloc(length * sizeof *ppArray);
             if (*ppArray != NULL) {
@@ -1928,14 +1849,9 @@ wayland_getSurfaceIDs(t_ilm_int* pLength, t_ilm_surface** ppArray)
     struct ilm_control_context *ctx = get_instance();
 
     if ((pLength != NULL) && (ppArray != NULL)) {
-        *pLength = 0;
-        *ppArray = NULL;
-
         struct surface_context *ctx_surf = NULL;
         t_ilm_uint length = wl_list_length(&ctx->main_ctx.list_surface);
-        if (length == 0) {
-            return ILM_SUCCESS;
-        }
+        *pLength = 0;
 
         *ppArray = (t_ilm_surface*)malloc(length * sizeof *ppArray);
         if (*ppArray != NULL) {
@@ -1967,8 +1883,6 @@ wayland_getSurfaceIDsOnLayer(t_ilm_layer layer,
     if ((pLength == NULL) || (ppArray == NULL)) {
         return ILM_FAILED;
     }
-    *pLength = 0;
-    *ppArray = NULL;
 
     ctx_layer = (struct layer_context*)wayland_controller_get_layer_context(
                     &ctx->child_ctx, (uint32_t)layer);
@@ -1978,10 +1892,6 @@ wayland_getSurfaceIDsOnLayer(t_ilm_layer layer,
     }
 
     length = wl_list_length(&ctx_layer->order.list_surface);
-    if (length == 0) {
-        return ILM_SUCCESS;
-    }
-
     *ppArray = (t_ilm_surface*)malloc(length * sizeof *ppArray);
     if (*ppArray == NULL) {
         return ILM_FAILED;
@@ -2591,15 +2501,9 @@ wayland_surfaceSetPosition(t_ilm_surface surfaceId, t_ilm_uint *pPosition)
         if (ctx_surf) {
             int32_t destX = (int32_t)*pPosition;
             int32_t destY = (int32_t)*(pPosition + 1);
-            struct surface_context *ctx_surf_cache =
-                get_surface_context(&ctx->child_ctx, surfaceId);
-            if (ctx_surf_cache == NULL) {
-                return returnValue;
-            }
             ivi_controller_surface_set_destination_rectangle(
                 ctx_surf->controller, destX, destY,
-                ctx_surf_cache->prop.destWidth,
-                ctx_surf_cache->prop.destHeight);
+                ctx_surf->prop.destWidth, ctx_surf->prop.destHeight);
             returnValue = ILM_SUCCESS;
         }
     }
