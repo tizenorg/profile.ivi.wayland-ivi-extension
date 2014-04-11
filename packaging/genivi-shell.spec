@@ -1,5 +1,5 @@
 Name:           genivi-shell
-Version:        0.1.1
+Version:        0.2.0
 Release:        0
 Summary:        GENIVI Shell Plugin-in
 License:        Apache-2.0
