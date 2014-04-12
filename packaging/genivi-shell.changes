@@ -1,3 +1,7 @@
+* Sun Apr 13 2014 Nobuhiko Tanibata <NOBUHIKO_TANIBATA@xddp.denso.co.jp> fbd114b
+- Remove installation of headers which are already removed from upstream branch.
+- Package with the latest upstrem version
+
 * Mon Mar 31 2014 Ossama Othman <ossama.othman@intel.com> submit/tizen_ivi/20140328.193458@e4ce369
 - Install Wayland protocol files without executable bit set.
 - Revert "Bug fixes for ilmControl to avoid potential NULL pointer access."
@@ -23,3 +27,4 @@
 * Mon Feb 24 2014 Ossama Othman <ossama.othman@intel.com> 53701f9
 - Package latest version.
 
+- Rebase to latest upstream code.

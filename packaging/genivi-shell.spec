@@ -80,10 +80,8 @@ install -m 644 protocol/ivi-controller-protocol.c \
 %defattr(-,root,root)
 %{_includedir}/ilm/ilm_client.h
 %{_includedir}/ilm/ilm_common.h
-%{_includedir}/ilm/ilm_configuration.h
 %{_includedir}/ilm/ilm_control.h
 %{_includedir}/ilm/ilm_platform.h
-%{_includedir}/ilm/ilm_tools.h
 %{_includedir}/ilm/ilm_types.h
 %{_includedir}/weston/*.h
 %{_libdir}/libilmClient.so
