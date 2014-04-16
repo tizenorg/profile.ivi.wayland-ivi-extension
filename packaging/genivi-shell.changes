@@ -1,3 +1,7 @@
+* Wed Apr 16 2014 Philippe Coval <philippe.coval@open.eurogiciel.org> submit/tizen_ivi_release/20140414.044449@ac241ff
+- packaging: Bump to 0.2.1
+  Bug-Tizen: TIVI-3087, TIVI-3029
+
 * Sun Apr 13 2014 Nobuhiko Tanibata <NOBUHIKO_TANIBATA@xddp.denso.co.jp> fbd114b
 - Remove installation of headers which are already removed from upstream branch.
 - Package with the latest upstrem version
