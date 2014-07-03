@@ -59,8 +59,6 @@ install -m 644 protocol/ivi-controller-server-protocol.h \
 install -m 644 protocol/ivi-controller-protocol.c \
     %{buildroot}/%{_datadir}/%{name}/protocol/
 
-ln -fs LayerManagerControl %{buildroot}/usr/bin/IVISurfaceCreator
-
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
