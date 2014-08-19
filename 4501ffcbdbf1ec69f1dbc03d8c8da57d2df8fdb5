@@ -1,3 +1,12 @@
+Code-Review+2: Ossama Othman <ossama.othman@intel.com>
+Verified+1: Ossama Othman <ossama.othman@intel.com>
+Code-Review+1: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
+Submitted-by: Ossama Othman <ossama.othman@intel.com>
+Submitted-at: Tue, 19 Aug 2014 10:56:04 -0700
+Reviewed-on: https://review.tizen.org/gerrit/23669
+Project: profile/ivi/wayland-ivi-extension
+Branch: refs/heads/tizen
+
 Code-Review+1: Nobuhiko Tanibata <ntanibata@jp.adit-jv.com>
 Reviewed-on: https://review.tizen.org/gerrit/23669
 Project: profile/ivi/wayland-ivi-extension
