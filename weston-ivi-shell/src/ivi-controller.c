@@ -31,11 +31,11 @@
 
 #include <wayland-server.h>
 
-#include "weston/compositor.h"
-#include "weston/ivi-shell.h"
-#include "weston/ivi-shell-ext.h"
+#include <weston/compositor.h>
+#include <weston/ivi-shell.h>
+#include <weston/ivi-shell-ext.h>
+#include <weston/ivi-layout-export.h>
 #include "ivi-controller-server-protocol.h"
-#include "ivi-layout-export.h"
 #include "bitmap.h"
 
 struct ivishell;
