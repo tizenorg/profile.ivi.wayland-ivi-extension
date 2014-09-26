@@ -9,6 +9,7 @@ Source0:        %name-%version.tar.gz
 Source1001:     genivi-shell.manifest
 BuildRequires:  cmake
 BuildRequires:  weston-ivi-shell-devel >= 0.1.7
+BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-egl)
 BuildRequires:  pkgconfig(wayland-server)
@@ -48,7 +49,7 @@ cat ivi-extension-protocol.pc.in \
 
 %build
 
-make %{?_smp_mflags} V=1
+%__make %{?_smp_mflags} V=1
 
 %install
 %make_install
