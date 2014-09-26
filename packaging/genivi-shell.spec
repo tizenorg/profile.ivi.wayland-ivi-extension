@@ -9,6 +9,7 @@ Source0:        %name-%version.tar.gz
 Source1001:     genivi-shell.manifest
 BuildRequires:  cmake
 BuildRequires:  weston-ivi-shell-devel >= 0.1.7
+BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-egl)
 BuildRequires:  pkgconfig(wayland-server)
@@ -37,6 +38,8 @@ cp %{SOURCE1001} .
 /usr/bin/wayland-scanner code < protocol/ivi-controller.xml \
     > protocol/ivi-controller-protocol.c
 
+%build
+
 cat ivi-extension-protocol.pc.in \
     | sed s\#@libdir@\#%{_libdir}\#g \
     | sed s\#@includedir@\#%{_includedir}/%{name}\#g \
@@ -46,9 +49,7 @@ cat ivi-extension-protocol.pc.in \
 
 %cmake .
 
-%build
-
-make %{?_smp_mflags} V=1
+%__make %{?_smp_mflags} V=1
 
 %install
 %make_install
