@@ -637,6 +637,7 @@
                 keyboard focus to those surfaces.
             </description>
             <arg name="surfaces" type="array"/>
+        </request>
 
     </interface>
 
