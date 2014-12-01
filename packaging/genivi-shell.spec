@@ -98,6 +98,11 @@ install -m 644  ivi-extension-protocol.pc \
 %{_libdir}/libilmControl.so.*
 %{_libdir}/weston/ivi-controller.so
 
+%{_bindir}/EGLWLInputEventExample
+#%exclude %{_bindir}/EGLWLInputEventExample
+#%exclude /usr/lib/debug/usr/bin/EGLWLInputEventExample.debug
+
+
 %files devel
 %defattr(-,root,root)
 %{_includedir}/ilm/ilm_client.h

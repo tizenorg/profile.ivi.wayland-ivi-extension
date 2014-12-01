@@ -452,11 +452,13 @@ send_surface_event(struct wl_resource *resource,
                                                 prop->pixelformat);
     }
 #endif
+#ifdef SUPPORT_INPUT_FOCUS
     if (mask & IVI_NOTIFICATION_KEYBOARD_FOCUS) {
         ivi_controller_surface_send_input_focus(resource,
                         IVI_CONTROLLER_SURFACE_INPUT_DEVICE_KEYBOARD,
-                        prop->hasKeyboardFocus);
+                        prop->has_keyboard_focus);
     }
+#endif
     if (mask & IVI_NOTIFICATION_REMOVE) {
         send_surface_add_event(ivisurf, resource, IVI_NOTIFICATION_REMOVE);
     }
@@ -1083,24 +1085,27 @@ controller_surface_destroy(struct wl_client *client,
 
 static void send_all_keyboard_focus(struct ivishell *shell)
 {
-    struct ivi_layout_SurfaceProperties props;
+#ifdef SUPPORT_INPUT_FOCUS
+    const struct ivi_layout_surface_properties *props;
     struct ivicontroller_surface *ctrlsurf;
     struct ivisurface *current_surf;
     uint32_t id_surface;
 
     wl_list_for_each(current_surf, &shell->list_surface, link) {
-        ivi_layout_getPropertiesOfSurface(current_surf->layout_surface,
-                                          &props);
-        id_surface = ivi_layout_getIdOfSurface(current_surf->layout_surface);
+        if (!(props = ivi_layout_get_properties_of_surface(current_surf->layout_surface)))
+	    props = &no_surface_props;
+
+        id_surface = ivi_layout_get_id_of_surface(current_surf->layout_surface);
         wl_list_for_each(ctrlsurf, &shell->list_controller_surface, link) {
             if (id_surface != ctrlsurf->id_surface) {
                     continue;
             }
             ivi_controller_surface_send_input_focus(ctrlsurf->resource,
                             IVI_CONTROLLER_SURFACE_INPUT_DEVICE_KEYBOARD,
-                            props.hasKeyboardFocus);
+                            props->has_keyboard_focus);
         }
     }
+#endif
 }
 
 static void
