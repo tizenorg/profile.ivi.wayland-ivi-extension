@@ -1114,6 +1114,7 @@ controller_surface_set_input_focus(struct wl_client *client,
               uint32_t device,
               int32_t enabled)
 {
+#ifdef SUPPORT_INPUT_FOCUS
     (void)client;
     struct ivisurface *ivisurf = wl_resource_get_user_data(resource);
 
@@ -1124,6 +1125,7 @@ controller_surface_set_input_focus(struct wl_client *client,
             send_all_keyboard_focus(ivisurf->shell);
         }
     }
+#endif
 }
 
 static const
@@ -1657,9 +1659,11 @@ controller_set_keyboard_focus(struct wl_client *client,
                               struct wl_resource *resource,
                               struct wl_array *surfaces)
 {
+#ifdef SUPPORT_INPUT_FOCUS
     struct ivicontroller *ctrl = wl_resource_get_user_data(resource);
     ivi_layout_set_keyboard_focus_on(surfaces->data, surfaces->size);
     send_all_keyboard_focus(ctrl->shell);
+#endif
 }
 
 static const struct ivi_controller_interface controller_implementation = {
