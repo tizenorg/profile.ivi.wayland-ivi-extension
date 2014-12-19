@@ -452,13 +452,11 @@ send_surface_event(struct wl_resource *resource,
                                                 prop->pixelformat);
     }
 #endif
-#ifdef SUPPORT_INPUT_FOCUS
     if (mask & IVI_NOTIFICATION_KEYBOARD_FOCUS) {
         ivi_controller_surface_send_input_focus(resource,
                         IVI_CONTROLLER_SURFACE_INPUT_DEVICE_KEYBOARD,
                         prop->has_keyboard_focus);
     }
-#endif
     if (mask & IVI_NOTIFICATION_REMOVE) {
         send_surface_add_event(ivisurf, resource, IVI_NOTIFICATION_REMOVE);
     }
@@ -1085,7 +1083,6 @@ controller_surface_destroy(struct wl_client *client,
 
 static void send_all_keyboard_focus(struct ivishell *shell)
 {
-#ifdef SUPPORT_INPUT_FOCUS
     const struct ivi_layout_surface_properties *props;
     struct ivicontroller_surface *ctrlsurf;
     struct ivisurface *current_surf;
@@ -1105,7 +1102,6 @@ static void send_all_keyboard_focus(struct ivishell *shell)
                             props->has_keyboard_focus);
         }
     }
-#endif
 }
 
 static void
@@ -1114,18 +1110,15 @@ controller_surface_set_input_focus(struct wl_client *client,
               uint32_t device,
               int32_t enabled)
 {
-#ifdef SUPPORT_INPUT_FOCUS
     (void)client;
     struct ivisurface *ivisurf = wl_resource_get_user_data(resource);
 
     if (device & IVI_CONTROLLER_SURFACE_INPUT_DEVICE_KEYBOARD) {
         if (enabled) {
-            uint32_t id = ivi_layout_get_id_of_surface(ivisurf->layout_surface);
-            ivi_layout_set_keyboard_focus_on(&id, 1);
+            ivi_layout_set_keyboard_focus_on(ivisurf->layout_surface);
             send_all_keyboard_focus(ivisurf->shell);
         }
     }
-#endif
 }
 
 static const
@@ -1659,7 +1652,10 @@ controller_set_keyboard_focus(struct wl_client *client,
                               struct wl_resource *resource,
                               struct wl_array *surfaces)
 {
-#ifdef SUPPORT_INPUT_FOCUS
+#if 0
+    /* this supposed to go away in later rteleases as
+       ivi_layout_set_keyboard_focus_on() nowadays takes a single surface
+       as opposed to an array */
     struct ivicontroller *ctrl = wl_resource_get_user_data(resource);
     ivi_layout_set_keyboard_focus_on(surfaces->data, surfaces->size);
     send_all_keyboard_focus(ctrl->shell);

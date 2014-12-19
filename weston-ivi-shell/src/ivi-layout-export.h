@@ -52,8 +52,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <stdbool.h>
-#include <weston/compositor.h>
+#include "stdbool.h"
+#include "compositor.h"
 
 #define IVI_SUCCEEDED (0)
 #define IVI_FAILED (-1)
@@ -81,6 +81,7 @@ struct ivi_layout_surface_properties
 	bool visibility;
 	int32_t transition_type;
 	uint32_t transition_duration;
+	uint32_t has_keyboard_focus;
 };
 
 struct ivi_layout_layer_properties
@@ -104,20 +105,20 @@ struct ivi_layout_layer_properties
 };
 
 enum ivi_layout_notification_mask {
-	IVI_NOTIFICATION_NONE           = 0,
-	IVI_NOTIFICATION_OPACITY        = (1 << 1),
-	IVI_NOTIFICATION_SOURCE_RECT    = (1 << 2),
-	IVI_NOTIFICATION_DEST_RECT      = (1 << 3),
-	IVI_NOTIFICATION_DIMENSION      = (1 << 4),
-	IVI_NOTIFICATION_POSITION       = (1 << 5),
-	IVI_NOTIFICATION_ORIENTATION    = (1 << 6),
-	IVI_NOTIFICATION_VISIBILITY     = (1 << 7),
-	IVI_NOTIFICATION_PIXELFORMAT    = (1 << 8),
-	IVI_NOTIFICATION_ADD            = (1 << 9),
-	IVI_NOTIFICATION_REMOVE         = (1 << 10),
-	IVI_NOTIFICATION_CONFIGURE      = (1 << 11),
+	IVI_NOTIFICATION_NONE        = 0,
+	IVI_NOTIFICATION_OPACITY     = (1 << 1),
+	IVI_NOTIFICATION_SOURCE_RECT = (1 << 2),
+	IVI_NOTIFICATION_DEST_RECT   = (1 << 3),
+	IVI_NOTIFICATION_DIMENSION   = (1 << 4),
+	IVI_NOTIFICATION_POSITION    = (1 << 5),
+	IVI_NOTIFICATION_ORIENTATION = (1 << 6),
+	IVI_NOTIFICATION_VISIBILITY  = (1 << 7),
+	IVI_NOTIFICATION_PIXELFORMAT = (1 << 8),
+	IVI_NOTIFICATION_ADD         = (1 << 9),
+	IVI_NOTIFICATION_REMOVE      = (1 << 10),
+	IVI_NOTIFICATION_CONFIGURE   = (1 << 11),
 	IVI_NOTIFICATION_KEYBOARD_FOCUS = (1 << 12),
-	IVI_NOTIFICATION_ALL            = 0xFFFF
+	IVI_NOTIFICATION_ALL         = 0xFFFF
 };
 
 enum ivi_layout_transition_type{
@@ -514,6 +515,29 @@ ivi_layout_surface_set_opacity(struct ivi_layout_surface *ivisurf,
 wl_fixed_t
 ivi_layout_surface_get_opacity(struct ivi_layout_surface *ivisurf);
 
+
+/**
+ * \brief Set the keyboard focus on a certain surface
+ * To receive keyboard events, 2 conditions must be fulfilled:
+ * 1- The surface must accept events from keyboard. See ilm_UpdateInputEventAcc eptanceOn
+ * 2- The keyboard focus must be set on that surface
+ *
+ * \return 0 if the method call was successful
+ * \return -1 if the method call was failed
+ */
+int32_t
+ivi_layout_set_keyboard_focus_on(struct ivi_layout_surface *ivisurf);
+
+
+/**
+ * \brief Get the indentifier of the surface which hold the keyboard focus
+ *
+ * \return 0 if the method call was successful
+ * \return -1 if the method call was failed
+ */
+int32_t
+ivi_layout_get_keyboard_focus_surface_id(struct ivi_layout_surface **pSurfaceId);
+
 /**
  * \brief Set the destination area of a surface within a layer for rendering.
  *
@@ -642,6 +666,18 @@ ivi_layout_screen_get_output(struct ivi_layout_screen *);
 
 struct weston_surface *
 ivi_layout_surface_get_weston_surface(struct ivi_layout_surface *ivisurf);
+
+/**
+ * \brief Get size; width, height, and stride.
+ *
+ * \return IVI_SUCCEEDED if the method call was successful
+ * \return IVI_FAILED if the method call was failed
+ */
+int32_t
+ivi_layout_surface_get_size(struct ivi_layout_surface *ivisurf,
+			    int32_t *width,
+			    int32_t *height,
+			    int32_t *stride);
 
 int32_t
 ivi_layout_layer_set_transition(struct ivi_layout_layer *ivilayer,
